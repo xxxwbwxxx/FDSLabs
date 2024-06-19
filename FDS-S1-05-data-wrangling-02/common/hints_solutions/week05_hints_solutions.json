@@ -1,0 +1,85 @@
+{
+    "1": {
+        "typeCode": true,
+        "solution": "###week05_ex1",
+        "hints": {
+            "hint 1": "The path is: `survey_data_path = os.path.join(os.getcwd(), 'datasets', 'survey_data.xlsx')`"
+        }
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###week05_ex2",
+        "hints": {
+            "hint 1": "A single pandas method can be used for this"
+        }
+    },
+    "2.1": {
+        "typeCode": false,
+        "solution": "###week05_ex2.1",
+        "hints": {}
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###week05_ex3",
+        "hints": {
+            "hint 1": "You can interactively play with this on: https://regex101.com/"
+        }
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###week05_ex4",
+        "hints": {
+            "hint 1": "Have you considered converting: `1700 -> 17:00`",
+            "hint 2": "Have you considered converting: `5pm -> 17:00`",
+            "hint 3": "Have you considered converting: `10am -> 10:00`",
+            "hint 4": "Have you considered converting: `10 -> 10:00`",
+            "hint 5": "Have you considered to remove spaces in the middle of the string"
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###week05_ex5",
+        "hints": {
+            "hint 1": "Can you utilise list comprehension in Python to do this? Or could you use df.apply(..)"
+        }
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###week05_ex6",
+        "hints": {
+            "Hint (part a)": "You can utilise the .min() method",
+            "Hint (part b)": "You can utilise the .sum() method"
+        }
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###week05_ex7",
+        "hints": {
+        }
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###week05_ex8",
+        "hints": {
+            "hint 1": "Printing the shape of the resulting DataFrame should return (501, 9).",
+            "hint 2": "You met the required function in the first Data Wranging lab, but there its argument was a list with only two members."
+        }
+    },
+    "9": {
+        "typeCode": true,
+        "solution": "###week05_ex9",
+        "hints": {
+            "hint 1": "Can you utilise re.sub(...)?"
+        }
+    },
+    "10": {
+        "typeCode": true,
+        "solution": "###week05_ex10",
+        "hints": {
+            "hint (part a)": "Use groupby to get the unique room count, then you can use room_count.max()",
+            "hint (part b)": "You groupby again, this time you can utilise the .idxmax() method",
+            "hint (part c)": "Before doing groupby, you would first need to convert to the columns to datetime format, e.g: `pd.to_datetime(timetable_data['Start'], errors='raise', format='%H:%M')`",
+            "hint (part d)": "This question should be simple (recall there is a column called 'type')"
+        }
+    }
+}

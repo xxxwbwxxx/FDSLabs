@@ -1,0 +1,123 @@
+###week05_ex1
+survey_data_path = os.path.join(os.getcwd(), 'datasets', 'survey_data.xlsx')
+survey_data = pd.read_excel(survey_data_path)
+survey_data.head()
+###week05_ex1_end
+
+###week05_ex2
+survey_data['Time at 10:00 BST'].value_counts()  # If dropna=True, NaN values will also be counted
+###week05_ex2_end
+
+###week05_ex2.1
+There are approx. 12 different ways that the time values have been input to the form by users. These include differences in spacing, usage of am/pm, colons, full-stops, letter casing, and some values which have been inferred as NaN.
+
+We could capture the majority of the values using the strftime() format '%H:%M'. This would leave us having to ignore over 50 user responses and convert to them NaN values. Including NaN values that might already exist in the column, this would mean losing around 15% of our data.
+
+In many cases, this might be acceptable; however, capturing as much of the data as possible might be really important in some contexts. For example, where the data concerns people's finances or transactions, error codes from medical devices, or volatile chemical production control software (e.g. the Hinkley Point C Nuclear power plant is software controlled!).
+###week05_ex2.1_end
+
+###week05_ex3
+search_str = 'data/CIFAR-10/images/bulldog_146.png'
+# your code
+pattern = re.compile(r'([^/]+)_\d+.png$')
+# .png$ makes sure we just have .png at the end of the line
+# \d matches numeric digits and + means one or more of them
+# _ is the underscore that appears in the original string just before the numbers
+# ([^/]+) matches a group of characters that do not contain a forward slash:
+## [...] matches any single characters in backets and [^...] is negation (matches any single character not in brackets)
+## Note that ^ matches beginning of the line.
+
+match = pattern.search(search_str)
+print("Entire matching string:", match.group(0))
+print("The match corresponding to the parenthesised group:", match.group(1))
+###week05_ex3_end
+
+###week05_ex4
+def time_clean(t):
+    """Clean a string from the survey data to a consistent string format ('%H:%M').
+    This function should handle the string cases found in Exercise 02."""
+    if isinstance(t, str):  # NaN values will be of type float
+        # re.sub replaces the parts of a string matching a pattern with a desired replacement
+        t = re.sub(' +', '', t) # Remove spaces in the middle of the string
+        t = re.sub('\.', ':', t) # Remove spaces in the middle of the string
+        t = re.sub('：', ':', t) # Replace "fullwidth colon" (Unicode character U+FF1A) with standard colon
+        t = re.sub('^(\d\d)(\d\d)', '\\1:\\2', t) # 1700 -> 17:00
+        t = re.sub('^(\d+)[Aa][Mm]', '\\1:00', t) # 10am -> 10:00
+        t = re.sub('^(\d\d)$', '\\1:00', t) # 10 -> 10:00
+        if re.match('^([^:]+)[Pp][Mm]', t): # 5pm -> 17:00
+            hour = re.sub('^([^:]+)[Pp][Mm]', '\\1', t)
+            t = str((int(hour) + 12)) + ":00"
+        t = re.sub('[Aa][Mm]', '', t) # 10:00am -> 10:00
+        t = re.sub('(\d\d):(\d\d).*', '\\1:\\2', t) # 10:00 plus a long comment -> 10:00
+    return(t)
+###week05_ex4_end
+
+###week05_ex5
+survey_data['Time at 10:00 BST'] = [pd.Timestamp(time_clean(t)) for t in survey_data['Time at 10:00 BST']]
+
+# Equivalent to:
+# survey_data['Time at 10:00 BST'] = survey_data['Time at 10:00 BST'].apply(lambda x: pd.Timestamp(timeclean(x)))
+###week05_ex5_end
+
+###week05_ex6
+earliest_time = survey_data['Time at 10:00 BST'].min()
+print("Earliest time:", earliest_time.time())
+
+local_count = (survey_data['Time at 10:00 BST'] == "10:00").sum()
+print("Number of users that are local to UK time:", local_count)
+###week05_ex6_end
+
+###week05_ex7
+pattern = re.compile(r'(\w+\s){3,}\w+\s?;')
+def shorten_equip(equip):
+    if isinstance(equip, str):
+        short_equip = pattern.sub('', equip)
+        return short_equip.replace('; ', '')
+    return ''  # NaN values
+
+survey_data['IT equipment'] = survey_data['IT equipment'].apply(lambda x: shorten_equip(x))
+
+equipment_expanded = survey_data['IT equipment'].str.get_dummies(sep=";")
+survey_equip_expanded = pd.concat([survey_data, equipment_expanded], axis=1)
+survey_equip_expanded.head()
+###week05_ex7_end
+
+###week05_ex8
+timetable_data = pd.concat(timetable_data_list, ignore_index=True)
+timetable_data.head()
+###week05_ex8_end
+
+###week05_ex9
+timetable_data["Type"] = timetable_data["Type"].apply(lambda x: re.sub("\*", "", x))
+###week05_ex9_end
+
+###week05_ex10
+# A. Building with most rooms
+room_count = timetable_data.groupby(["Building"])["Room"].nunique()
+print(room_count)
+print(room_count.idxmax(), "has", room_count.max(), "rooms.")
+
+# B. Most used room across the buildings
+most_used = timetable_data.groupby(["Building", "Room"]).size().idxmax()
+print(most_used[1], "in", most_used[0], "is the most used.")
+
+# C. Set errors arg to 'raise' so we're aware of data that doesn't conforms
+# Note that by default, pd.to_datetime initialise the datetime objects from the UNIX 'beginning of time'
+timetable_data['Start'] = pd.to_datetime(timetable_data['Start'], errors='raise', format='%H:%M')
+timetable_data['End'] = pd.to_datetime(timetable_data['End'], errors='raise', format='%H:%M')
+
+grouped_by_type = timetable_data.groupby('Type')
+activity_durations = grouped_by_type.apply(lambda grp: grp['End'] - grp['Start'])
+
+# Mean length of a Lecture
+print("Mean duration of a lecture:", activity_durations["Lecture"].mean())
+print("And median duration:", activity_durations["Lecture"].median())
+
+# D. Longest activity type scheduled
+longest_session_per_type = activity_durations.groupby("Type").max()
+average_durations = activity_durations.groupby("Type").mean()
+
+print("Longest session duration for each type:\n", longest_session_per_type, "\n")
+print("Average session duration for each type:\n", average_durations, "\n")
+print("Longest activity scheduled on average:", average_durations.idxmax(), "\n")
+###week05_ex10_end

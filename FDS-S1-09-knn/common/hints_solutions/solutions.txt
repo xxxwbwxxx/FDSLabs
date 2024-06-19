@@ -1,0 +1,119 @@
+###ex1
+cluster_1_x = [0.5, 0.5, 1.3, 2.4, 2, 2, 2.5]
+cluster_1_y = [2, 3, 1.5, 2, 2.5, 3.2, 2.5]
+cluser_2_x = [2.5, 3, 2.7, 4, 4.5, 4.5, 5]
+cluster_2_y = [1.4, 0.5, 1.8, 1.5, 0.7, 2.5, 2]
+query = [2.5, 1.7]
+fig, ax = plt.subplots(figsize=(8,5))
+ax.scatter(cluster_1_x, cluster_1_y)
+ax.scatter(cluser_2_x, cluster_2_y)
+ax.plot(query[0], query[1], marker='x')
+circle1 = plt.Circle((2.5, 1.7), 0.5, color='k', fill=False)
+circle2 = plt.Circle((2.5, 1.7), 1, color='k', fill=False)
+ax.add_patch(circle1)
+ax.add_patch(circle2)
+# This will assign the query point to cluster 2 with K=3, and to cluster 1 with K=5
+###ex1_end
+
+###ex1.1
+Choosing k too small leads to overfitting and your model will be susceptible to noise.
+
+Choosing k too large leads to underfitting and your model will have a very simple boundary, and in the worst case consider all new data points as from the same class, which has most data entries in your data set.
+###ex1.1_end
+
+###ex2
+wine = pd.read_csv(os.path.join(os.getcwd(), 'datasets', 'winequality-red.csv'))
+wine
+for score in range(3,9):
+    print('There are ' + str(len(wine[wine['quality'] == score])) + ' wines with score ' + str(score))
+
+# A one-line version of the abov is:
+print(wine['quality'].value_counts())
+    
+wine.loc[wine.quality < 6, 'quality'] = 0
+wine.loc[(wine.quality == 6), 'quality'] = 1
+wine.loc[(wine.quality > 6), 'quality'] = 2
+
+
+print('\nBased on the new scoring scheme:\n')
+for score in range(0,3):
+    print('There are ' + str(len(wine[wine['quality'] == score])) + ' wines with score ' + str(score))
+    
+# Or, a one-line version of the above:
+print(wine['quality'].value_counts())
+###ex2_end
+
+###ex3
+sns.pairplot(data=wine, hue='quality')
+###ex3_end
+
+###ex4
+wine_labels = wine['quality']
+wine_features = wine.drop(columns=['quality'])
+###ex4_end
+
+###ex5
+standardiser = StandardScaler()
+wine_features_standardised = standardiser.fit_transform(wine_features)
+###ex5_end
+
+###ex6
+wine_features_standardised_train, wine_features_standardised_test, wine_labels_train, wine_labels_test = train_test_split(wine_features_standardised,
+                     wine_labels, test_size=0.2)
+###ex6_end
+
+###ex7
+knn = KNeighborsClassifier()
+knn.fit(wine_features_standardised_train, wine_labels_train)
+df = pd.DataFrame({'predicted': knn.predict(wine_features_standardised_test),
+              'actual': wine_labels_test})
+df
+## Accuracy by coding
+np.sum(df['predicted'] == df['actual'])/len(df)
+## Accuracy by scikit-learn
+metrics.accuracy_score(wine_labels_test, knn.predict(wine_features_standardised_test))
+###ex7_end
+
+###ex8
+accuracy = []
+for k in range(1, 100):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(wine_features_standardised_train, wine_labels_train)
+    wine_predict = knn.predict(wine_features_standardised_test)
+    accuracy.append(metrics.accuracy_score(wine_labels_test, wine_predict))
+
+plt.plot(range(1, 100), accuracy)
+# plt.ylim([0, 1]) # We can discuss where the baseline should be!
+###ex8_end
+
+###ex8.1
+The plot above only shows the accuracy for one specific test data set, and might strongly vary on different test sets.
+
+If several models have a similar good accuracy, one should lean towards the simpler model, as a more complex model might overfit to data.
+###ex8.1_end
+
+###ex9
+k_range = range(1,100)
+k_scores=[]
+for k in k_range:
+    knn = KNeighborsClassifier(n_neighbors=k) 
+    accuracy = cross_val_score(knn, wine_features_standardised_train, wine_labels_train, cv=4, scoring='accuracy') 
+    k_scores.append(accuracy.mean())
+    
+plt.plot(k_range, k_scores)
+plt.xlabel('Value of K for KNN')
+plt.ylabel('Cross-validated accuracy')
+###ex9_end
+
+###ex10
+pca = PCA(n_components=11).fit(wine_features_standardised)
+pca_result = pca.transform(wine_features_standardised)
+
+fig, ax = plt.subplots()
+scatter = ax.scatter(x=pca_result[:, 0], y=pca_result[:, 1], c=wine_labels)
+ax.legend(*scatter.legend_elements(),loc="upper right", title="Quality")
+ax.set_xlabel('First principal component')
+ax.set_ylabel('Second principal component')
+ax.set_title('PCA of Wine Quality')
+## We don't have answers for rest of this question - it's up to you to investigate
+###ex10_end

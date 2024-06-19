@@ -1,0 +1,112 @@
+###week08_ex0
+It makes it possible to visualize high-dimensional data
+
+It can improve the speed of ML algorithms, by reducing the complexity of the problem
+
+It makes other algorithms more noise resistant, by focussing only on relevant parts of the data.
+###week08_ex0_end
+
+###week08_ex1
+breast_cancer = pd.read_csv(os.path.join(os.getcwd(), 'datasets', 'breast_cancer.csv'))
+print(breast_cancer.head()) # As this is not the last line in the cell, it would not be printed to the screen without print()
+breast_cancer.drop(columns = ['id', 'Unnamed: 32'], inplace=True)
+breast_cancer['diagnosis'] = breast_cancer['diagnosis'].replace({'M':1, 'B':0})
+breast_cancer.dropna(inplace=True) # Instead of inplace=True, you could also save the output of this line to the same variable
+sns.pairplot(hue='diagnosis', data=breast_cancer[['diagnosis','radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean', 'compactness_mean', 'concavity_mean']])
+diagnosis = breast_cancer['diagnosis']
+breast_cancer.drop(columns=['diagnosis'], inplace=True)
+breast_cancer
+###week08_ex1_end
+
+###week08_ex1.1
+Data could be on different scales (10.000 ml vs 10 L), and would thus have a larger weight, without explaining actual variance in the data set.
+###week08_ex1.1_end
+
+###week08_ex2
+def standardize(df):
+    standardized = pd.DataFrame()
+    for col in df.columns: # We can apply mathematical operation to entire columns at once, as they are built on top of numpy arrays
+        standardized[col] = (df[col]-df[col].mean())/df[col].std() #For each column move the data s.t. it is centered around 0 and has variance=1
+    return standardized
+print(standardize(breast_cancer))
+###week08_ex2_end
+
+###week08_ex3
+def principal_component_analysis(df):
+    standardized = standardize(df)
+    cov_matrix = np.cov(standardized.values.T) # Transpose the dataset, as pandas stores data in rows x features and the covariance would be computed as the covariance of the rows, but we are interested in the covariance of the features
+    return np.linalg.eig(cov_matrix)
+print(principal_component_analysis(breast_cancer))
+###week08_ex3_end
+
+###week08_ex4
+def sort_eigenvalues(eigenvalues, eigenvectors):
+    idx = eigenvalues.argsort()[::-1]   
+    eigenvalues = eigenvalues[idx]
+    eigenvectors = eigenvectors[:,idx]
+    return eigenvalues, eigenvectors
+###week08_ex4_end
+
+###week08_ex5
+def principal_component_analysis(df):
+    standardized = standardize(df) # Standardise the data
+    cov_matrix = np.cov(standardized.values.T) # Compute the covariance matrix 
+    eigenvalues, eigenvectors = np.linalg.eig(cov_matrix) 
+    eigenvalues, eigenvectors = sort_eigenvalues(eigenvalues, eigenvectors)
+    for i in range(len(eigenvalues)):
+        print('PC' + str(i+1) + ' explains ' + str(round((eigenvalues[i] / np.sum(eigenvalues))*100)) + '% of the variance.')
+    return (eigenvalues, eigenvectors)
+principal_component_analysis(breast_cancer)
+###week08_ex5_end
+
+###week08_ex6
+standardized = standardize(breast_cancer)
+e_values, e_vectors = principal_component_analysis(breast_cancer) #e_vectors is already in the right format
+result = standardized.dot(e_vectors[:,:2])
+sns.scatterplot(x= result[0], y = result[1], hue=diagnosis)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+###week08_ex6_end
+
+###week08_ex7
+#a
+diabetes_loc = os.path.join(os.getcwd(), 'datasets', 'diabetes.csv')
+diabetes = pd.read_csv(diabetes_loc)
+sns.pairplot(hue='Outcome', data=diabetes)
+# The distinction seems far less clear than in the breast cancer data set, as many more data points overlap
+diabetes = diabetes[(diabetes['Glucose']>0) 
+                    & (diabetes['BloodPressure']>0) 
+                    & (diabetes['SkinThickness']>0)
+                    & (diabetes['Insulin']>0)
+                    & (diabetes['BMI']>0)]
+                    
+#b
+diagnosis_diabetes = diabetes['Outcome']
+diabetes.drop(columns=['Outcome'], inplace=True)
+standardized_diabetes = standardize(diabetes)
+e_values, e_vectors = principal_component_analysis(diabetes) #e_vectors is already in the right format
+result_diabetes = standardized_diabetes.dot(e_vectors[:,:3])
+sns.scatterplot(x= result_diabetes[0], y = result_diabetes[1], hue=diagnosis_diabetes)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+###week08_ex7_end
+
+###week08_ex8
+e_values, e_vectors = principal_component_analysis(standardized_diabetes) #e_vectors is already in the right format
+result_diabetes = standardized_diabetes.dot(e_vectors[:,:3])
+sns.scatterplot(x= result_diabetes[0], y = result_diabetes[1], hue=diagnosis_diabetes)
+fig = plt.figure(figsize=(15,15))
+ax = fig.add_subplot(111, projection='3d')
+
+
+ax.scatter(result_diabetes[0], result_diabetes[1], result_diabetes[2], c=diagnosis_diabetes)
+
+ax.set_xlabel('PC1')
+ax.set_ylabel('PC2')
+ax.set_zlabel('PC3')
+
+plt.show()
+###week08_ex8_end
+
+###week08_ex9
+###week08_ex9_end

@@ -1,0 +1,233 @@
+###week03_ex1
+fig, ((ax1, ax2), (ax3, ax4), (ax5,ax6), (ax7, ax8), (ax9, ax10)) = plt.subplots(5,2, figsize=(10, 15))
+###week03_ex1_end
+
+###week03_ex2
+annual_co2_africa_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_africa.csv')
+annual_co2_africa = pd.read_csv(annual_co2_africa_loc)
+annual_co2_europe_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_europe.csv')
+annual_co2_europe = pd.read_csv(annual_co2_europe_loc)
+annual_co2_asia_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_asia.csv')
+annual_co2_asia = pd.read_csv(annual_co2_asia_loc)
+annual_co2_americas_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_americas.csv')
+annual_co2_americas = pd.read_csv(annual_co2_americas_loc)
+annual_co2_china_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_china.csv')
+annual_co2_china = pd.read_csv(annual_co2_china_loc)
+annual_co2_eu28_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_eu28.csv')
+annual_co2_eu28 = pd.read_csv(annual_co2_eu28_loc)
+annual_co2_india_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_india.csv')
+annual_co2_india = pd.read_csv(annual_co2_india_loc)
+annual_co2_international_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_international.csv')
+annual_co2_international = pd.read_csv(annual_co2_international_loc)
+annual_co2_middleeast_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_middleeast.csv')
+annual_co2_middleeast = pd.read_csv(annual_co2_middleeast_loc)
+annual_co2_us_loc = os.path.join(os.getcwd(), 'datasets', 'annual_co2_us.csv')
+annual_co2_us = pd.read_csv(annual_co2_us_loc)
+annual_co2_china.tail()
+###week03_ex2_end
+
+###week03_ex3
+plt.plot(annual_co2_africa['Year'], annual_co2_africa['Annual CO₂ emissions (tonnes )']/1e9, '#543005')
+plt.plot(annual_co2_asia['Year'], annual_co2_asia['Annual CO₂ emissions (tonnes )']/1e9, '#8c510a')
+plt.plot(annual_co2_americas['Year'], annual_co2_americas['Annual CO₂ emissions (tonnes )']/1e9, '#bf812d')
+plt.plot(annual_co2_eu28['Year'], annual_co2_eu28['Annual CO₂ emissions (tonnes )']/1e9, '#dfc27d')
+plt.plot(annual_co2_europe['Year'], annual_co2_europe['Annual CO₂ emissions (tonnes )']/1e9, '#f6e8c3')
+plt.plot(annual_co2_china['Year'], annual_co2_china['Annual CO₂ emissions (tonnes )']/1e9, '#c7eae5')
+plt.plot(annual_co2_india['Year'], annual_co2_india['Annual CO₂ emissions (tonnes )']/1e9, '#80cdc1')
+plt.plot(annual_co2_us['Year'], annual_co2_us['Annual CO₂ emissions (tonnes )']/1e9, '#35978f')
+plt.plot(annual_co2_middleeast['Year'], annual_co2_middleeast['Annual CO₂ emissions (tonnes )']/1e9, '#01665e')
+plt.plot(annual_co2_international['Year'], annual_co2_international['Annual CO₂ emissions (tonnes )']/1e9, '#003c30')
+plt.ylabel('Annual $CO_2$ emissions (billion tonnes)')
+plt.title('Annual CO emissions')
+plt.legend(['Africa', 'Asia','Americas', 'EU28', 'Europe(other)', 'China', 'India', 'US', 'Middle East', 'International Transport'])
+plt.show()
+## Note: this looks really small in the notebook - but it would look fine if saved using plt.savefig('annual-co2-emissions.pdf
+###week03_ex3_end
+
+###week03_ex3.1
+Cluttered plots difficult to read, easier to directly compare two different time courses.
+
+Finding 10 different colours for colourblind people is a difficult task.
+###week03_ex3.1_end
+
+###week03_ex4
+cumulative_co2_emissions_loc = os.path.join(os.getcwd(), 'datasets', 'cumulative_co2_emissions.csv')
+cumulative_co2_emissions = pd.read_csv(cumulative_co2_emissions_loc)
+size = len(cumulative_co2_emissions)
+cumulative_co2_emissions.head(size)
+###week03_ex4_end
+
+###week03_ex5
+co2_vs_gdp_loc = os.path.join(os.getcwd(), 'datasets', 'co-emissions-per-capita-vs-gdp-per-capita-international-.csv')
+co2_vs_gdp = pd.read_csv(co2_vs_gdp_loc)
+co2_vs_gdp.head()
+###week03_ex5_end
+
+###week03_ex6
+colours = ['#d73027','#fc8d59','#fee090','#e0f3f8','#91bfdb','#4575b4']
+
+# Your code
+# a
+drinks_by_country_loc = os.path.join(os.getcwd(), 'datasets', 'drinks_by_country.csv')
+drinks_by_country = pd.read_csv(drinks_by_country_loc)
+
+# b
+co2_vs_gdp_by_continent = pd.merge(co2_vs_gdp, drinks_by_country, left_on=['Entity'],right_on=['Country'], how='inner')
+
+# You can skip to (c) at this point, since the exercise is really about visualisation.
+# However, the rest of this part of the solution to (b) shows you how to deal with
+# mismatch between values of categorical variables when merging.
+
+# Note that co2_vs_gdp_by_continent has fewer rows than co2_vs_gdp
+print('# rows in drinks_by_country: %d; # rows in co2_vs_gdp: %d; # rows in co2_vs_gdp_by_continent: %d'%(len(drinks_by_country), len(co2_vs_gdp), len(co2_vs_gdp_by_continent)))
+# This implises that the Entity and country names do not all match.
+# We can see which ones in co2_vs_gdp, but not in drinks_by_country like this:
+set(co2_vs_gdp['Entity']) - set(drinks_by_country['Country'])
+# Now we can see what the full list of country names is in drinks_by_country, and work out
+# what we should rename them to so that they have the same name co2_vs_gdp.
+', '.join(drinks_by_country['Country'])
+# OK, it looks like we can make the following substitutions and merge again - there still will be on
+# country fewer in the co2_vs_gdp_by_continent data frame than in the co2_vs_gdp data frame
+drinks_by_country2 = drinks_by_country
+drinks_by_country2['Country'].replace({'USA': 'United States',
+                                          'DR Congo': 'Democratic Republic of Congo',
+                                          'Russian Federation': 'Russia'}, inplace=True)
+
+co2_vs_gdp_by_continent = pd.merge(co2_vs_gdp, drinks_by_country2, left_on=['Entity'],right_on=['Country'], how='inner')
+## Note that co2_vs_gdp_by_continent has fewer rows than co2_vs_gdp
+print('# rows in drinks_by_country: %d; # rows in co2_vs_gdp: %d; # rows in co2_vs_gdp_by_continent: %d'%(len(drinks_by_country), len(co2_vs_gdp), len(co2_vs_gdp_by_continent)))
+# c
+continents = pd.unique(co2_vs_gdp_by_continent['Continent'])
+
+plt.figure(figsize=(15,10))
+# Note: to fit this into a report, we'd need plt.figure(figsize=(6,4)), which would mean we'd need to fix
+# overlapping labels. plt.tight_layout() could help, a bit, but we might need to 
+
+for i in range(len(continents)):
+    co2_vs_gdp_by_single_continent = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Continent'] == continents[i]]
+    scatter = plt.scatter(co2_vs_gdp_by_single_continent['GDP per capita (international-$ (in 2011 prices))'],
+                co2_vs_gdp_by_single_continent['CO₂ emissions per capita (tonnes per capita)'],
+                c=colours[i],
+                s=co2_vs_gdp_by_single_continent['Total population (Gapminder)']/1e6,
+                edgecolors='k')
+plt.xlabel('GDP per capita (international-$ (in 2011 prices))')
+plt.ylabel('CO₂ emissions per capita (tonnes per capita)')
+plt.xscale('log')
+# d
+lgnd = plt.legend(loc="upper left", labels=continents)
+# d*
+for i in range(len(continents)):
+    lgnd.legendHandles[i]._sizes = [50]
+
+# e
+largest_population = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Total population (Gapminder)'] == max(co2_vs_gdp_by_continent['Total population (Gapminder)'])].iloc[0]['Entity']
+highest_gdp = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['GDP per capita (international-$ (in 2011 prices))'] == max(co2_vs_gdp_by_continent['GDP per capita (international-$ (in 2011 prices))'])].iloc[0]['Entity']
+lowest_gdp  = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['GDP per capita (international-$ (in 2011 prices))'] == min(co2_vs_gdp_by_continent['GDP per capita (international-$ (in 2011 prices))'])].iloc[0]['Entity']
+highest_co2 = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['CO₂ emissions per capita (tonnes per capita)'] == max(co2_vs_gdp_by_continent['CO₂ emissions per capita (tonnes per capita)'])].iloc[0]['Entity']
+
+# f
+# One country from each continent
+countries = [co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Continent'] == continent].iloc[-1]['Entity'] for continent in continents]
+
+countries.append(largest_population)
+countries.append(highest_gdp)
+countries.append(lowest_gdp)
+countries.append(highest_co2)
+
+for i in range(len(countries)):
+    plt.annotate(countries[i], # this is the text
+                 (co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Entity'] == countries[i]]['GDP per capita (international-$ (in 2011 prices))'],co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Entity'] == countries[i]]['CO₂ emissions per capita (tonnes per capita)']), # this is the point to label
+                 ha='center') # horizontal alignment can be left, right or center
+###week03_ex6_end
+
+###week03_ex7
+# Your code
+fig, ((ax1, ax2),(ax3,ax4)) = plt.subplots(2,2, figsize = (15,15))
+
+# Note: this looks OK in a Jupyter notebook. To put into a report with legible font sizes,
+# ideally we'd use plt.figure(figsize=(6,6)), which would mean we'd need 
+# to fix problems with overlapping labels and axis names. "plt.tight_layout()" right at the end
+# would help a bit. We might also be able to reduce the fontsize to
+# 8pt like this:
+# import matplotlib
+# matplotlib.rcParams['font.size'] = 8
+# But there would still be other tweaks required to make the plots look really good
+
+# First plot
+
+ax1.plot(annual_co2_africa['Year'], annual_co2_africa['Annual CO₂ emissions (tonnes )']/1e9, '#543005')
+ax1.plot(annual_co2_asia['Year'], annual_co2_asia['Annual CO₂ emissions (tonnes )']/1e9, '#8c510a')
+ax1.plot(annual_co2_americas['Year'], annual_co2_americas['Annual CO₂ emissions (tonnes )']/1e9, '#bf812d')
+ax1.plot(annual_co2_eu28['Year'], annual_co2_eu28['Annual CO₂ emissions (tonnes )']/1e9, '#dfc27d')
+ax1.plot(annual_co2_europe['Year'], annual_co2_europe['Annual CO₂ emissions (tonnes )']/1e9, '#f6e8c3')
+ax1.plot(annual_co2_china['Year'], annual_co2_china['Annual CO₂ emissions (tonnes )']/1e9, '#c7eae5')
+ax1.plot(annual_co2_india['Year'], annual_co2_india['Annual CO₂ emissions (tonnes )']/1e9, '#80cdc1')
+ax1.plot(annual_co2_us['Year'], annual_co2_us['Annual CO₂ emissions (tonnes )']/1e9, '#35978f')
+ax1.plot(annual_co2_middleeast['Year'], annual_co2_middleeast['Annual CO₂ emissions (tonnes )']/1e9, '#01665e')
+ax1.plot(annual_co2_international['Year'], annual_co2_international['Annual CO₂ emissions (tonnes )']/1e9, '#003c30')
+ax1.set_xlabel('Year')
+ax1.set_ylabel('Annual $CO_2$ emissions (billion tonnes) from 1900-2017')
+ax1.set_title('Annual $CO_2$ emissions (billion tonnes) from 1900-2017')
+ax1.legend(['Africa', 'Asia','Americas', 'EU28', 'Europe(other)', 'China', 'India', 'US', 'Middle East', 'International Transport'])
+
+# Second plot
+
+ax2.stackplot(annual_co2_africa['Year'], # x value
+              annual_co2_africa['Annual CO₂ emissions (tonnes )']/1e9, # y1 value  
+              annual_co2_asia['Annual CO₂ emissions (tonnes )']/1e9,  # y2 value ...
+              annual_co2_americas['Annual CO₂ emissions (tonnes )']/1e9, 
+              annual_co2_eu28['Annual CO₂ emissions (tonnes )']/1e9, 
+              annual_co2_europe['Annual CO₂ emissions (tonnes )']/1e9,
+              annual_co2_china['Annual CO₂ emissions (tonnes )']/1e9,
+              annual_co2_india['Annual CO₂ emissions (tonnes )']/1e9,
+              annual_co2_us['Annual CO₂ emissions (tonnes )']/1e9,
+              annual_co2_middleeast['Annual CO₂ emissions (tonnes )']/1e9,
+              annual_co2_international['Annual CO₂ emissions (tonnes )']/1e9, colors=['#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'])
+ax2.legend(['Africa', 'Asia','Americas', 'EU28', 'Europe(other)', 'China', 'India', 'US', 'Middle East', 'International Transport'], loc='upper left')
+ax2.set_xlabel('Year')
+ax2.set_title('Annual $CO_2$ emissions from 1900-2017')
+ax2.set_ylabel('Annual $CO_2$ emissions (billion tonnes) from 1900-2017')
+
+#Third plot
+
+ax3.bar(region, co2_emissions, color=['grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'red', 'red'])
+ax3.set_xticks(region)
+ax3.set_xticklabels(region, rotation=45, ha='right')
+ax3.set_ylabel('Cumulative CO₂ emissions by region (billion tonnes) from 1900-2017')
+ax3.set_title('Cumulative $CO_2$ emissions from 1900-2017')
+
+# Fourth plot
+
+for i in range(len(continents)):
+    co2_vs_gdp_by_single_continent = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Continent'] == continents[i]]
+    scatter = ax4.scatter(co2_vs_gdp_by_single_continent['GDP per capita (international-$ (in 2011 prices))'],
+                co2_vs_gdp_by_single_continent['CO₂ emissions per capita (tonnes per capita)'],
+                c=colours[i],
+                s=co2_vs_gdp_by_single_continent['Total population (Gapminder)']/1e6,
+                edgecolors='k')
+ax4.set_xlabel('GDP per capita (international-$ (in 2011 prices))')
+ax4.set_ylabel('CO₂ emissions per capita (tonnes per capita)')
+ax4.set_title('CO₂ emissions per capita')
+
+ax4.set_xscale('log')
+lgnd = ax4.legend(loc="upper left", labels=continents)
+for i in range(len(continents)):
+    lgnd.legendHandles[i]._sizes = [50]
+
+largest_population = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Total population (Gapminder)'] == max(co2_vs_gdp_by_continent['Total population (Gapminder)'])].iloc[0]['Entity']
+highest_gdp = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['GDP per capita (international-$ (in 2011 prices))'] == max(co2_vs_gdp_by_continent['GDP per capita (international-$ (in 2011 prices))'])].iloc[0]['Entity']
+lowest_gdp  = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['GDP per capita (international-$ (in 2011 prices))'] == min(co2_vs_gdp_by_continent['GDP per capita (international-$ (in 2011 prices))'])].iloc[0]['Entity']
+highest_co2 = co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['CO₂ emissions per capita (tonnes per capita)'] == max(co2_vs_gdp_by_continent['CO₂ emissions per capita (tonnes per capita)'])].iloc[0]['Entity']
+countries = [co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Continent'] == continent].iloc[-1]['Entity'] for continent in continents]
+countries.append(largest_population)
+countries.append(highest_gdp)
+countries.append(lowest_gdp)
+countries.append(highest_co2)
+
+for i in range(len(countries)):
+    ax4.annotate(countries[i], # this is the text
+                 (co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Entity'] == countries[i]]['GDP per capita (international-$ (in 2011 prices))'],co2_vs_gdp_by_continent[co2_vs_gdp_by_continent['Entity'] == countries[i]]['CO₂ emissions per capita (tonnes per capita)']), # this is the point to label
+                 ha='center') # horizontal alignment can be left, right or center
+    
+fig.savefig("CO2_emissions.png")
+###week03_ex7_end

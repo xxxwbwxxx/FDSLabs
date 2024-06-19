@@ -1,0 +1,109 @@
+###ex1
+salaries = full_data['Salary']
+k = 10000
+n = len(salary_data)
+
+x_star_tilde = np.zeros(k)
+for i in range(k):
+    x_star = salaries.sample(n, replace=True)
+    x_star_tilde[i] = x_star.mean()
+    
+    
+plt.hist(x_star_tilde, 20)
+print("Confidence interval")
+print(pd.Series(x_star_tilde).quantile([0.025, 0.975]))
+###ex1_end
+
+###ex2
+def bootstrap(x, k=1000, estimator=np.mean, quantiles=[0.025, 0.975], plot=False):
+    n = len(x)
+    x_star_est = np.zeros(k)
+    for i in range(k):
+        x_star = np.random.choice(x, n, replace=True)
+        x_star_est[i] = estimator(x_star)
+        
+    if (plot):
+        plt.hist(x_star_est, 20)
+    return(np.quantile(x_star_est, quantiles), np.std(x_star_est))
+
+ci, std = bootstrap(salaries, plot=True)
+print(ci, std)
+###ex2_end
+
+###ex3
+SEM = np.std(salaries, ddof=1)/np.sqrt(len(salaries))
+ci, std = bootstrap(salaries, plot=True)
+print(SEM, std, ci)
+###ex3_end
+
+###ex4
+bootstrap(salaries, 1000, estimator=np.median, plot=True)
+###ex4_end
+
+###ex5
+# First compute mean and SEM (already done above)
+SEM = salaries.std(ddof=1)/np.sqrt(len(salaries))
+xbar = salaries.mean()
+
+# We now need the z-critical values for 2.5% and 99.5%
+z = norm.isf(0.025)
+ci = [xbar - SEM*z, xbar + SEM*z]
+ci
+###ex5_end
+
+###ex6
+full_data['LogSalary'] = np.log10(full_data['Salary'])
+sns.pairplot(full_data, vars=['Age', 'LogSalary'])
+model = smf.ols('LogSalary ~ Age', data=full_data)
+results = model.fit()
+results.params
+###ex6_end
+
+###ex7
+def beta0hat(df):
+    model = smf.ols('LogSalary ~ Age', data=df)
+    results = model.fit()
+    return(results.params['Intercept'])
+
+def beta1hat(df):
+    model = smf.ols('LogSalary ~ Age', data=df)
+    results = model.fit()
+    return(results.params['Age'])
+
+print(beta0hat(full_data))
+print(beta1hat(full_data))
+###ex7_end
+
+###ex8
+def bootstrap_df(df, k=1000, estimator=beta0hat, quantiles=[0.025, 0.975], plot=False):
+    n = len(df)
+    x_star_est = np.zeros(k)
+    for i in range(k):
+        x_star = df.sample(n, replace=True)
+        x_star_est[i] = estimator(x_star)
+        
+    if (plot):
+        plt.hist(x_star_est, 20)
+    return(np.quantile(x_star_est, quantiles), np.std(x_star_est))
+
+def salary_mean(df):
+    return(df['Salary'].mean())
+
+bootstrap_df(full_data, estimator=salary_mean)
+###ex8_end
+
+###ex9
+beta0_est = bootstrap_df(full_data, estimator=beta0hat)
+beta1_est = bootstrap_df(full_data, estimator=beta1hat)
+print(beta0_est)
+print(beta1_est)
+###ex9_end
+
+###ex10
+Yes the standard errors are close
+Yes the confidence intervals are close
+###ex10_end
+
+###ex11
+The null hypothesis is rejected at p=0. You should find that the number 0 is not contained in either of the confidence intervals.
+###ex11_end

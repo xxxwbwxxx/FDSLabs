@@ -1,0 +1,74 @@
+{
+    "1": {
+        "typeCode": true,
+        "solution": "###ex1",
+        "hints": {
+            "hint": "You can either create a loop which gets a [random number](https://pynative.com/python-random-randrange/) between 0 and the length of the data set, and appends the value to the `random_data_points` array (remember that each value appended to the array needs to be distinct), or you can use [numpy's](https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.random.permutation.html) `random.permutation()` function to create an array of same length as the data set with randomly permutated integers between 0 and length of the data set, and take the first `n_clusters` values of that array and assign it to `random_data_points`. "
+        }
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###ex2",
+        "hints": {
+            "hint 1": "Numpy's `argmin()` might help to find the centroid with the minimal distance."
+        }
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###ex3",
+        "hints": {
+            "hint 1": "The type of the final returned value should be a ndarray.",
+            "hint 2": "Could you utilise `np.vstack(...)`?"
+        }
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###ex4",
+        "hints": {
+            "discussion answer": "Standardisation should lead to more spherical clusters, which are helpful for K-means."
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###ex5",
+        "hints": {
+
+        }
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###ex6",
+        "hints": {
+            "hint 1": "The native class would be: `KMeans(n_clusters=2)`, whereas our class is `K_Means(n_clusters=2)`"
+        }
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###ex7",
+        "hints": {}
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###ex8",
+        "hints": {}
+    },
+    "9": {
+        "typeCode": true,
+        "solution": "###ex9",
+        "hints": {
+            "hint 1": "The first two dimensions would be: `df_kmeans_pca_scores.iloc[:,0],   df_kmeans_pca_scores.iloc[:,1]`"
+        }
+    },
+    "10": {
+        "typeCode": true,
+        "solution": "###ex10",
+        "hints": {}
+    },
+    "10.1": {
+        "typeCode": false,
+        "solution": "###ex10.1",
+        "hints": {
+            "hint 1": "Look at the sklearn documentation of *K*-means, the parameters might give you some ideas."
+        }
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "1": {
+        "typeCode": true,
+        "solution": "###week03_ex1",
+        "hints": {
+            "hint 1": "Can you use something like: `fig, ((ax1, ax2), (ax3, ax4), ...`"
+        }
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###week03_ex2",
+        "hints": {
+            "hint 1": "There is no simpler way of doing this. You are required to store the dataframes as variables of the file names, e.g `annual_co2_africa.csv`'s data should be stored with the variable `annual_co2_africa`."
+        }
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###week03_ex3",
+        "hints": {
+            "hint 1": "Recall that to plot multiple lines, you can apply the plot function twice e.g `plt.plot(...); plt.plot(...)`",
+            "hint 2": "To make the plot clearer, you can add a Legend, e.g: `plt.legend(['Africa', 'Asia','Americas', 'EU28', 'Europe(other)', 'China', 'India', 'US', 'Middle East', 'International Transport'])`"
+        }
+    },
+    "3.1": {
+        "typeCode": false,
+        "solution": "###week03_ex3.1",
+        "hints": {}
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###week03_ex4",
+        "hints": {
+            "hint 1": "You can use `len(...)` to check the number of entries"
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###week03_ex5",
+        "hints": {}
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###week03_ex6",
+        "hints": {
+            "Hint 1 (part b)": "Recall to merge with different column names you can use the arguments `left_on=['Entity'],right_on=['Country']`",
+            "Hint 1 (part c)": "Use a loop to filter the DataFrame for each unique values of the `Continent` column",
+            "Hint 1 (part e)": "To find the largest population, could you use something similar to: `df[df['population'] == max(df['population'])].iloc[0]['Entity']`. Note that you will need to change `df` and `population`",
+            "Hint 1 (part f)": "Here is a starting point: https://stackoverflow.com/questions/15910019/annotate-data-points-while-plotting-from-pandas-dataframe"
+        }
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###week03_ex7",
+        "hints": {
+            "Hint 1": "Here's a reminder as to how to create 4 subplots: `fig, ((ax1, ax2),(ax3,ax4)) = plt.subplots(2,2, figsize = (15,15))`"
+        }
+    }
+}

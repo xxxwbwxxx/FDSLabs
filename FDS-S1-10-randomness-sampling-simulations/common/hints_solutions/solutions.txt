@@ -1,0 +1,146 @@
+###ex1
+x = np.random.uniform(size=1000)
+plt.hist(x, 10)
+plt.xlabel("x")
+plt.ylabel("Frequency")
+
+
+x1 = np.random.uniform(size=100)
+x2 = np.random.uniform(size=1000)
+x3 = np.random.uniform(size=100000)
+fig, (ax1, ax2, ax3) = plt.subplots(1,3, figsize=(6,2))
+ax1.hist(x1, 10)
+ax1.set_xlabel("x")
+ax1.set_ylabel("Frequency")
+ax2.hist(x2, 10)
+ax2.set_xlabel("x")
+ax3.hist(x3, 10)
+ax3.set_xlabel("x")
+plt.tight_layout()
+###ex1_end
+
+###ex2
+x1 = np.random.normal(size=100)
+x2 = np.random.normal(size=1000)
+x3 = np.random.normal(size=100000)
+y1 = np.random.exponential(size=100)
+y2 = np.random.exponential(size=1000)
+y3 = np.random.exponential(size=100000)
+fig, ((ax1, ax2, ax3),(ax4, ax5, ax6)) = plt.subplots(2,3, figsize=(6, 4))
+ax1.hist(x1, 10)
+ax1.set_ylabel("Frequency")
+ax2.hist(x2, 10)
+ax2.set_title("Normal distribution")
+ax3.hist(x3, 10)
+ax4.hist(y1, 10)
+ax4.set_ylabel("Frequency")
+ax4.set_xlabel("x")
+ax5.hist(y2, 10)
+ax5.set_title("Exponential distribution")
+ax5.set_xlabel("x")
+ax6.hist(y3, 10)
+ax6.set_xlabel("x")
+plt.tight_layout()
+###ex2_end
+
+###ex3
+k = 10000
+n = 10
+all_means = np.zeros(k)
+for i in range(0, k):
+    x = np.random.exponential(size=n)
+    all_means[i] = x.mean()
+    
+plt.hist(all_means, 20)
+###ex3_end
+
+###ex4
+player_data = pd.read_csv("datasets/player_data.csv")
+salary_data = pd.read_csv("datasets/salary_data.csv")
+player_data.head(3)
+salary_data.head(3)
+full_data = pd.merge(salary_data, player_data,
+                     left_on="PlayerName", right_on="Name")
+full_data['Salary']=full_data['Salary']/1000000
+full_data.head(3)
+###ex4_end
+
+###ex5
+def histograms(df):
+    # The +2 is needed to create the right number of bins
+    age_bins = np.arange(min(df['Age']), max(df['Age']) + 2, 1)
+    salary_bins = np.arange(min(df['Salary']), max(df['Salary']) + 2, 1)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 4))
+    ax1.hist(df['Age'], bins=age_bins)
+    ax1.set_ylabel('Frequency')
+    ax1.set_xlabel('Age (year)')
+    ax1.set_title('Age distribution')
+    ax2.hist(df['Salary'], bins=salary_bins)
+    ax2.set_xlabel('Salary (million dollars)')
+    ax2.set_title('Salary distribution') 
+    plt.tight_layout()
+    
+histograms(full_data)
+###ex5_end
+
+###ex6
+def compute_statistics(df):
+    return pd.Series([df['Age'].mean(),
+            df['Salary'].mean()])    
+
+full_stats = compute_statistics(full_data)
+full_stats
+###ex6_end
+
+###ex7
+convenience_sample = full_data[full_data['Age'] < 22]
+histograms(convenience_sample)
+# Your code
+convenience_stats = compute_statistics(convenience_sample)
+convenience_stats
+###ex7_end
+
+###ex8
+results = pd.DataFrame(columns=['Age', 'Salary'])
+for i in range(0,100):
+    subset = full_data.sample(44, replace=False)
+    subset_stats = compute_statistics(subset)
+    results.loc[i] = dict(Age=subset_stats[0], Salary=subset_stats[1])
+print("Mean age:" + str(results.Age.mean()))
+print("Mean salary:" + str(results.Salary.mean()))
+print("Variance age:" + str(results.Age.var()))
+print("Variance salary:" + str(results.Salary.var()))
+results
+###ex8_end
+
+###ex9
+results = pd.DataFrame(columns=['Age', 'Salary'])
+for i in range(0,100):
+    subset = full_data.sample(100, replace=False)
+    subset_stats = compute_statistics(subset)
+    results.loc[i] = dict(Age=subset_stats[0], Salary=subset_stats[1])
+print("Mean age:" + str(results.Age.mean()))
+print("Mean salary:" + str(results.Salary.mean()))
+print("Variance age:" + str(results.Age.var()))
+print("Variance salary:" + str(results.Salary.var()))
+results
+###ex9_end
+
+###ex10
+population_proportions = [.26, .74]
+def panel_number_black():
+    panel = np.random.choice(['Black', 'Non-Black'], 100, True, population_proportions)
+    return(np.sum(panel == 'Black'))
+
+k = 10000
+panels = np.zeros(k)
+
+for i in np.arange(k):
+    panels[i] = panel_number_black()
+hist_panels = plt.hist(panels, bins=np.arange(5.5,40.))
+plt.scatter(8, 10, color='red')
+plt.title('Simulation')
+
+plt.xlabel('Number of Black people on panel')
+plt.ylabel('Frequency')
+###ex10_end

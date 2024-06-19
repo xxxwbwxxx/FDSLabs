@@ -1,0 +1,72 @@
+{
+    "1": {
+        "typeCode": true,
+        "solution": "###ex1",
+        "hints": {
+            "hint 1": "This data set has `?` characters instead of `NaN values",
+            "hint 2": "We suggest you interpret `t` as `True` and `f` as `False`"
+        }
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###ex2",
+        "hints": {
+            "hint 1": "How can you utilise `.groupby(...)?`",
+            "hint 2": "You can use `.groupby('Gender')`"
+        }
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###ex3",
+        "hints": {}
+    },
+    "3.1": {
+        "typeCode": false,
+        "solution": "###ex3.1",
+        "hints": {}
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###ex4",
+        "hints": {
+            "hint 1": "To perform `log_{10}` you can use the numpy function `np.log10(...)`"
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###ex5",
+        "hints": {
+            "hint 1": "You will have to supply a numpy matrix of independent variables and a vector of response variables - the Nearest Neighbours lab may remind you how to do it.",
+            "hint 2": "The sklearn `predict_proba()` function can be applied to the fitted model",
+            "Discussion answer": "This is the log odds of approval of credit for a customer aged 0. They are e^-1.162 = 0.313 times as likely to be approved as to be declined."
+        }
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###ex6",
+        "hints": {}
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###ex7",
+        "hints": {
+            "Hint 1": "You may need to set the `max_iter=1000` for the `LogisticRegression()`, as otherwise the model won't converge.",
+            "discussion answer": "Only `Intercept`, `YearsEmployed`, `NoPriorDefault`, `LogIncome` and `LogCreditScore` have 95% confidence intervals that do not include zero. Remember that zero corresponds to no change in the log odds. The value zero is close to the centre of the confidence intervals for the other attributes (independent variables), suggesting that they are not significant relationships. We could imagine dropping the attributes whose coefficients appear to be close to zero. There are also some coefficients that are correlated. For example, bootstrap samples with a high coefficient for Employed tend to have a lower `LogCreditScore`."
+        }
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###ex8",
+        "hints": {}
+    },
+    "9": {
+        "typeCode": true,
+        "solution": "###ex9",
+        "hints": {}
+    },
+    "10": {
+        "typeCode": true,
+        "solution": "###ex10",
+        "hints": {}
+    }
+}

@@ -1,0 +1,60 @@
+{
+    "1": {
+        "typeCode": false,
+        "solution": "###ex1",
+        "hints": {}
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###ex2",
+        "hints": {
+            "hint 1": "This can be done in 2 lines of code"
+        }
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###ex3",
+        "hints": {}
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###ex4",
+        "hints": {
+            "hint 1": "You will need to convert to `.string` at the end"
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###ex5",
+        "hints": {
+            "hint 1": "There are indeed many `.div`'s involved, can you find how many?"
+        }
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###ex6",
+        "hints": {}
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###ex7",
+        "hints": {}
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###ex8",
+        "hints": {
+            "Hint 1": "Recall `pd.merge(...)`"
+        }
+    },
+    "9": {
+        "typeCode": true,
+        "solution": "###ex9",
+        "hints": {}
+    },
+    "10": {
+        "typeCode": true,
+        "solution": "###ex10",
+        "hints": {}
+    }
+}

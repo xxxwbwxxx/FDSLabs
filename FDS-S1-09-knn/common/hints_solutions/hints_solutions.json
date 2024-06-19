@@ -1,0 +1,72 @@
+{
+    "1": {
+        "typeCode": true,
+        "solution": "###ex1",
+        "hints": {
+            "hint 1": "You can use `plt.Circle(...)` to plot a circle"
+        }
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###ex2",
+        "hints": {
+            "hint 1": "To score the wines based on quality, you could do: `wine.loc[wine.quality < 6, 'quality'] = 0`"
+        }
+    },
+    "1.1": {
+        "typeCode": false,
+        "solution": "###ex1.1",
+        "hints": {}
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###ex3",
+        "hints": {}
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###ex4",
+        "hints": {
+            "hint 1": "You can use `plt.xticks(rotation=x)`, where you need to find the optimal value for the number `x`"
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###ex5",
+        "hints": {
+            "hint 1 (part a)": ""
+        }
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###ex6",
+        "hints": {}
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###ex7",
+        "hints": {}
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###ex8",
+        "hints": {
+            "hint 1": "Store the accuracy calculations in an array, which you append to in your for loop, which you can use to plot later."
+        }
+    },
+    "8.1": {
+        "typeCode": false,
+        "solution": "###ex8.1",
+        "hints": {}
+    },
+    "9": {
+        "typeCode": true,
+        "solution": "###ex9",
+        "hints": {}
+    },
+    "10": {
+        "typeCode": true,
+        "solution": "###ex10",
+        "hints": {}
+    }
+}

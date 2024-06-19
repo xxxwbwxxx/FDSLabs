@@ -1,0 +1,101 @@
+###week04_ex0
+People can only die once, so it is likely that there will be fewer older people than younger ones.
+
+Many societies have a growing young population when the average numbers of children per woman is greater than 2
+###week04_ex0_end
+
+###week04_ex1
+plt.hist(diabetes['Age'], bins=[18, 25, 35, 45, 55, 65, 75])
+plt.xlabel('Age') # Make the meaning of the data clear
+plt.ylabel('Frequency') # Make the meaning of the data clear
+plt.title('Distribution of ages of female patients') # Make the meaning of the data clear
+###week04_ex1_end
+
+###week04_ex2
+diabetes_true = diabetes[diabetes['Outcome'] == 1]
+diabetes_false = diabetes[diabetes['Outcome'] == 0]
+
+# Make the data accessible: If this is saved as a PDF it will be 6ins wide. If then placed in a doc with text width
+# of 6ins it won't be shrunk or expanded => the font size would be unchanged that specified
+# in matplotlib
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize = (6, 3)) 
+bins = np.arange(-0.5, 70.5, 2) # Show the data by using plots with the same scale
+ylim = [0, 60] # Show the data by using plots with the same scale
+ax1.hist(diabetes_true['BMI'], bins)
+ax1.set_xlabel('BMI')
+ax1.set_ylabel('Fequency')
+ax1.set_title('Diabetes')
+ax1.set_ylim(ylim)
+ax2.hist(diabetes_false['BMI'], bins)
+ax2.set_xlabel('BMI')
+ax2.set_ylabel('')
+ax2.set_title('No diabetes')
+ax1.set_ylim(ylim)
+###week04_ex2_end
+
+###week04_ex3
+n_patients = len(diabetes_true['BMI']) #268 patients, thus the median is the average of the 134th and 135th value (in a sorted list) 
+diabetes_sorted = diabetes_true.sort_values(by='BMI')['BMI']
+median = (diabetes_sorted.iloc[int(n_patients/2)]+diabetes_sorted.iloc[int(n_patients/2)-1])/2 # Remember that the first entry is 0 not 1, thus we need to take the value at 133th and 134th position
+lower_half = diabetes_sorted[0:134]
+upper_half = diabetes_sorted[134:]
+lower_quartile = (lower_half.iloc[int(n_patients/4)]+lower_half.iloc[int(n_patients/4)-1])/2 
+upper_quartile = (upper_half.iloc[int(n_patients/4)-1]+upper_half.iloc[int(n_patients/4)])/2
+inter_quartile_range = upper_quartile - lower_quartile
+mean = diabetes_sorted.sum()/n_patients
+squared_diff = (diabetes_sorted-mean)**2
+std= math.sqrt(squared_diff.sum()/(n_patients-1))
+print(lower_quartile, upper_quartile, inter_quartile_range, median, mean, std)
+
+# b
+print(diabetes_true['BMI'].quantile(0.25), diabetes_true['BMI'].quantile(0.75), diabetes_true['BMI'].quantile(0.75) - diabetes_true['BMI'].quantile(0.25), diabetes_true['BMI'].median(), diabetes_true['BMI'].mean(), diabetes_true['BMI'].std())
+###week04_ex3_end
+
+###week04_ex4
+plt.boxplot(bmi, labels=['Patients diagnosed with diabetes', 'Patients not diagnosed with diabetes'])
+plt.ylabel('BMI')
+plt.title('BMI of female patients with and without diabetes')
+plt.xticks(rotation=-15)
+###week04_ex4_end
+
+###week04_ex5
+# a
+bmi_pregnancy_diabetes_true = []
+bmi_pregnancy_diabetes_false = []
+for i in range(11):
+    bmi_pregnancy_diabetes_true.append(diabetes_true[diabetes_true['Pregnancies'] == i]['BMI'])
+    bmi_pregnancy_diabetes_false.append(diabetes_false[diabetes_false['Pregnancies'] == i]['BMI'])
+bmi_pregnancy_diabetes_true.append(diabetes_true[diabetes_true['Pregnancies'] >= 11]['BMI'])
+bmi_pregnancy_diabetes_false.append(diabetes_false[diabetes_false['Pregnancies'] >= 11]['BMI'])
+
+#b
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 4))
+ax1.boxplot(bmi_pregnancy_diabetes_true, labels=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11+'])
+ax1.set_xlabel('Number of pregnancies')
+ax1.set_title('Diagnosed with diabetes')
+ax1.set_ylabel('BMI')
+ax1.tick_params(labelsize=8) # Accessibility: minimum font size and prevents text overlaps
+ax2.boxplot(bmi_pregnancy_diabetes_false, labels=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11+'])
+ax2.set_xlabel('Number of pregnancies')
+ax2.set_title('Not diagnosed with diabetes')
+ax1.tick_params(labelsize=8) # Accessibility: minimum font size and prevents text overlaps
+# ax2.set_ylabel('BMI') # Don't need this, since it's obvious from the scale
+ax2.set_ylim([0, 70]) # Show the data: same scale allows for comparisons
+plt.tight_layout()
+plt.show()
+
+#c
+# It doesn't seem to have an effect
+###week04_ex5_end
+
+###week04_ex5.1
+When distributions have several maxima the boxplot would not represent it well.
+
+Bimodal distribution.
+###week04_ex5.1_end
+
+###week04_ex6
+Boxplots are simpler, and when an exact distribution is not needed it might help to reduce the complexity to illustrate a point you make.
+
+Boxplots hide a lot of information. E.g. a bimodal distribution will not be visible in a boxplot
+###week04_ex6_end

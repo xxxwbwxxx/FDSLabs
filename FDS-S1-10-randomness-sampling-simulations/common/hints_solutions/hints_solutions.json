@@ -1,0 +1,74 @@
+{
+    "1": {
+        "typeCode": true,
+        "solution": "###ex1",
+        "hints": {
+            "hint 1": "You should get something that looks like the uniform distribution in Figure 1 of the Randomness, Simulation and Sampling lecture notes.",
+            "What do we observe?": "The more samples we use the more it looks like a uniform distribution."
+        }
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###ex2",
+        "hints": {
+            "hint 1": "You can use `np.random.normal` and `np.random.exponential`"
+        }
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###ex3",
+        "hints": {
+            "hint 1": "This can be done in 8 lines of code!",
+            "hint 2": "You can plot the histogram with `plt.hist`"
+        }
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###ex4",
+        "hints": {
+            "hint 1": "Recall that you can use `pd.merge` to combine the dataset",
+            "hint 2": "To normalise, you simply divide the salary column by a million"
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###ex5",
+        "hints": {}
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###ex6",
+        "hints": {
+            "hint 1": "You should return something like: `pd.Series([x, y])`"
+        }
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###ex7",
+        "hints": {
+            "Discussion answer": "The convenience sample does not give us an accurate picture of the salary of the full population. Younger players tend to be paid less, so we are seeing a smaller range of salaries."
+        }
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###ex8",
+        "hints": {
+            "Do the means represent the full dataset?": "By sampling randomly, the statistics are closer to the real statistics."
+        }
+    },
+    "9": {
+        "typeCode": true,
+        "solution": "###ex9",
+        "hints": {
+            "Part 1": "The variance of the statistics is smaller. Thus these samples represent the full data better.",
+            "Part 2": "The histograms are closer to the histograms of the full data set."
+        }
+    },
+    "10": {
+        "typeCode": true,
+        "solution": "###ex10",
+        "hints": {
+            "hint 1": "Look into using `np.random.choice`"
+        }
+    }
+}

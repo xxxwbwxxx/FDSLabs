@@ -1,0 +1,104 @@
+{
+    "1": {
+        "typeCode": true,
+        "solution": "###week06_ex1",
+        "hints": {
+            "hint 1": "The path is: `survey_data_path = os.path.join(os.getcwd(), 'datasets', 'survey_data.xlsx')`"
+        }
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###week06_ex2",
+        "hints": {
+            "hint 1": "e.g for Glucose, the filter would look like: `(diabetes_raw['Glucose'] != 0)`"
+        }
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###week06_ex3",
+        "hints": {
+            "hint 1": "What plot could we use here? We can use `sns.histplot`"
+        }
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###week06_ex4",
+        "hints": {}
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###week06_ex5",
+        "hints": {
+            "hint 1": "You can do this in one line using Seaborn!"
+        }
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###week06_ex6",
+        "hints": {
+            "hint 1": "You can use `sns.lineplot` for the regression line"
+        }
+    },
+    "6.1": {
+        "typeCode": false,
+        "solution": "###week06_ex6.1",
+        "hints": {}
+    },
+    "6.2": {
+        "typeCode": false,
+        "solution": "###week06_ex6.2",
+        "hints": {}
+    },
+    "6.3": {
+        "typeCode": false,
+        "solution": "###week06_ex6.3",
+        "hints": {}
+    },
+    "6.4": {
+        "typeCode": false,
+        "solution": "###week06_ex6.4",
+        "hints": {}
+    },
+    "6.5": {
+        "typeCode": false,
+        "solution": "###week06_ex6.5",
+        "hints": {}
+    },
+    "7": {
+        "typeCode": false,
+        "solution": "###week06_ex7",
+        "hints": {}
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###week06_ex8",
+        "hints": {}
+    },
+    "9": {
+        "typeCode": true,
+        "solution": "###week06_ex9",
+        "hints": {}
+    },
+    "10": {
+        "typeCode": true,
+        "solution": "###week06_ex10",
+        "hints": {
+            "hint 1": "`model1 = smf.ols('SkinThickness ~ BMI', data=diabetes)`"
+        }
+    },
+    "11": {
+        "typeCode": true,
+        "solution": "###week06_ex11",
+        "hints": {}
+    },
+    "11.1": {
+        "typeCode": false,
+        "solution": "###week06_ex11.1",
+        "hints": {}
+    },
+    "12": {
+        "typeCode": true,
+        "solution": "###week06_ex12",
+        "hints": {}
+    }
+}

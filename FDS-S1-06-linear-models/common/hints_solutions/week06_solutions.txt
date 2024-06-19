@@ -1,0 +1,136 @@
+###week06_ex1
+#a
+diabetes_loc = os.path.join(os.getcwd(), 'datasets', 'diabetes.csv')
+diabetes_raw = pd.read_csv(diabetes_loc)
+
+#b
+sns.pairplot(diabetes_raw, hue='Outcome')
+###week06_ex1_end
+
+###week06_ex2
+diabetes = diabetes_raw[(diabetes_raw['Glucose'] != 0) & (diabetes_raw['Insulin'] != 0) & (diabetes_raw['BMI'] != 0) & (diabetes_raw['SkinThickness'] != 0)]
+sns.pairplot(diabetes, hue='Outcome')
+###week06_ex2_end
+
+###week06_ex3
+sns.histplot(x='Glucose', hue='Outcome', data=diabetes, kde=True)
+
+# Yes diabetics have a higher level of glucose on average
+###week06_ex3_end
+
+###week06_ex4
+# A
+sns.heatmap(diabetes.corr(), annot=True)
+# B
+# r = 0.581
+# C
+# Yes, the correlation coefficient and the pairplot seem consistent and both suggest a moderate correlation.
+# r is the linear correlation coefficient
+###week06_ex4_end
+
+###week06_ex5
+# Version 1 (Matplotlib)
+fig, ax = plt.subplots()
+insulin_glucose = ax.scatter(diabetes['Glucose'],
+            diabetes['Insulin'],
+            c=diabetes['Outcome'])
+ax.set_xlabel('Glucose')
+ax.set_ylabel('Insulin')
+ax.legend(*insulin_glucose.legend_elements(), loc="upper left", title="Diabetes")
+# Version 2 (Seaborn)
+sns.scatterplot(data=diabetes, hue='Outcome', y='Insulin', x='Glucose')
+###week06_ex5_end
+
+###week06_ex6
+sns.scatterplot(data=diabetes, hue='Outcome', y='Insulin', x='Glucose')
+## x = diabetes['Glucose'] and yhat = results.predict(diabetes['Glucose'])
+y_hat = results.predict(diabetes['Glucose'])
+sns.lineplot(x=diabetes['Glucose'], y=y_hat)
+###week06_ex6_end
+
+###week06_ex6.1
+Fit seems reasonable
+
+More spread of Insulin around the regression line for high values of Glucose (heteroscedasticity)
+###week06_ex6.1_end
+
+###week06_ex6.2
+R2 = 0.338
+
+R2a = 0.336
+
+beta0 = -118.41
+
+beta1 = 2.2382
+
+Yes the coefficient B1 indicates that for every 1 unit of glucose, insulin is 2.24 units higher.
+###week06_ex6.2_end
+
+###week06_ex6.3
+Looking at the plot, the spread around the regression line looks to be on a scale of around 100.
+###week06_ex6.3_end
+
+###week06_ex6.4
+Heteroscedasticity
+###week06_ex6.4_end
+
+###week06_ex6.5
+R2 = 0.38 rather than 0.338
+
+R2a = 0.379 rather than 0.336
+
+Beta0 = 1.3500
+
+Beta1 = 0.0060
+###week06_ex6.5_end
+
+###week06_ex7
+LogInsulin = 1.3502 + 0.0060*Glucose
+
+Insulin = 10^(1.3502)*10^(0.0060*Glucose)
+###week06_ex7_end
+
+###week06_ex8
+sns.scatterplot(data=diabetes, hue='Outcome', y='Insulin', x='Glucose')
+sns.lineplot(x=diabetes['Glucose'], y=results.predict(diabetes['Glucose'])) # x = diabetes['Glucose'] and yhat = results.predict(diabetes['Glucose'])
+sns.lineplot(x=diabetes['Glucose'], y=np.power(10, 1.3502 + 0.0060*diabetes['Glucose']))
+###week06_ex8_end
+
+###week06_ex9
+fig, (ax1, ax2) = plt.subplots(1, 2)
+ax1.scatter(diabetes['BMI'], diabetes['SkinThickness'])
+ax2.scatter(diabetes['Age'], diabetes['SkinThickness'])
+ax1.set_ylabel('Skin Thickness')
+ax1.set_xlabel('BMI')
+ax2.set_xlabel('Age')
+###week06_ex9_end
+
+###week06_ex10
+model1 = smf.ols('SkinThickness ~ BMI', data=diabetes)
+results1 = model1.fit()
+results1.summary()
+###week06_ex10_end
+
+###week06_ex11
+model2 = smf.ols('SkinThickness ~ BMI + Age', data=diabetes)
+results2 = model2.fit()
+results2.summary()
+###week06_ex11_end
+
+###week06_ex11.1
+The R^2 has increased slightly, but not by a great deal, suggesting that Age as an untransformed variable does not have a great influence on the skin thickness.
+###week06_ex11.1_end
+
+###week06_ex12
+diabetes2 = diabetes.copy()
+diabetes2['LogGlucose'] =  diabetes['Glucose'].apply(np.log10)
+
+diabetes = diabetes2
+
+loglogmodel = smf.ols('LogInsulin ~ LogGlucose', data=diabetes)
+loglogresults = loglogmodel.fit()
+sns.scatterplot(data=diabetes, hue='Outcome', y='LogInsulin', x='LogGlucose')
+sns.lineplot(x=diabetes['LogGlucose'], y=loglogresults.predict(diabetes['LogGlucose'])) # x = diabetes['Glucose'] and yhat = results.predict(diabetes['Glucose'])
+sns.scatterplot(x=diabetes['LogGlucose'], y=loglogresults.resid)
+loglogresults.summary()
+###week06_ex12_end

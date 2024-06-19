@@ -1,0 +1,128 @@
+###ex1
+credit = pd.read_csv('datasets/Credit_Approval.csv')
+credit.head()
+# credit.replace('?', pd.NA, inplace=True)
+credit.dropna(inplace=True)
+credit.replace('+', 1, inplace=True)
+credit.replace('-', 0, inplace=True)
+credit['Gender']=credit['Gender'].replace('a', 0)
+credit['Gender']=credit['Gender'].replace('b', 1)
+credit['Employed']=credit['Employed'].replace('f', 0)
+credit['Employed']=credit['Employed'].replace('t', 1)
+credit['NoPriorDefault']=credit['NoPriorDefault'].replace('f', 0)
+credit['NoPriorDefault']=credit['NoPriorDefault'].replace('t', 1)
+credit['DriversLicense']=credit['DriversLicense'].replace('f', 0)
+credit['DriversLicense']=credit['DriversLicense'].replace('t', 1)
+credit.drop(['ZipCode'], axis=1, inplace=True)
+credit.head()
+###ex1_end
+
+###ex2
+credit.groupby('Gender').mean()
+###ex2_end
+
+###ex3
+plt.figure(figsize=(6,6))
+# We removed the binary values, as they do not show much in a pairplot
+sns.pairplot(credit.drop(['Gender', 'NoPriorDefault', 'Employed', 'DriversLicense'], axis=1), hue='Approved')
+plt.tight_layout()
+###ex3_end
+
+###ex3.1
+If the data is skewed, a log-transformation can help to make the distribution of the data closer to a normal distribution.
+Both Income and Credit score seem very skewed.
+If we have a value that is equal to 0, we are taking the log of zero, which is not defined.
+###ex3.1_end
+
+###ex4
+credit['LogIncome'] = np.log10(credit['Income'] + 1)
+credit['LogCreditScore'] = np.log(credit['CreditScore'] + 1)
+credit.drop(['Income', 'CreditScore'], axis=1, inplace=True)
+sns.pairplot(credit.drop(['Gender', 'NoPriorDefault', 'Employed', 'DriversLicense'], axis=1), hue='Approved')
+###ex4_end
+
+###ex5
+X = credit[['Age']].to_numpy(copy=True) 
+y = credit['Approved'].to_numpy()
+model = LogisticRegression().fit(X, y)
+beta0 = model.intercept_[0]
+beta1 = model.coef_[0][0]
+print("Beta 0: " + str(beta0) + ", Beta 1: " + str(beta1))
+plt.figure()
+
+sns.scatterplot(x='Age', y='Approved', data=credit.sample(50))
+x = np.arange(credit.Age.min(), credit.Age.max(), 0.1)
+plt.plot(x, model.predict_proba(np.reshape(x, (-1, 1)))[:,1])
+###ex5_end
+
+###ex6
+X = credit.drop(columns=['Approved']).to_numpy(copy=True) 
+y = credit['Approved'].to_numpy()
+model = LogisticRegression().fit(X, y)
+beta0 = model.intercept_[0]
+beta1 = model.coef_[0]
+print("Beta 0: " + str(beta0) + ", Beta 1: " + str(beta1))
+
+## Display as Series with names to aid explanation
+coeffs = pd.concat([pd.Series({'Intercept': beta0}),
+                    pd.Series(beta1, index=credit.columns[credit.columns != 'Approved'])])
+coeffs
+###ex6_end
+
+###ex7
+def credit_linreg(credit):
+    X = credit.drop(columns=['Approved']).to_numpy(copy=True) 
+    y = credit['Approved'].to_numpy()
+    model = LogisticRegression(max_iter=1000).fit(X, y)
+    coeffs = pd.concat([pd.Series(model.intercept_, index=['Intercept']),
+                        pd.Series(model.coef_[0], index=credit.columns.drop('Approved'))])
+    return(coeffs)
+
+coeffs = credit_linreg(credit)
+
+def bootstrap_df(df, k=1000, estimator=credit_linreg):    
+    ## Main part of bootstrap
+    n = len(df)
+    coeffs = estimator(df)
+    x_star_est = pd.DataFrame(index=range(k), columns=coeffs.index, dtype='float')
+    for i in range(k):
+        x_star = df.sample(n, replace=True)
+        coeffs_star = estimator(x_star)      
+        x_star_est.loc[i] = coeffs_star
+    
+    return(x_star_est)
+
+coeffs_bs = bootstrap_df(credit)
+
+coeffs_bs.quantile([0.025, 0.975])
+
+sns.pairplot(coeffs_bs)
+###ex7_end
+
+###ex8
+credit_std = credit.copy()
+s = credit_std.std()
+xbar = credit_std.mean()
+credit_std['Age'] = credit_std['Age'].transform(lambda x: (x - xbar['Age'])/s['Age'])
+credit_std['LogIncome'] = credit_std['LogIncome'].transform(lambda x: (x - xbar['LogIncome'])/s['LogIncome'])
+credit_std['Debt'] = credit_std['Debt'].transform(lambda x: (x - xbar['Debt'])/s['Debt'])
+credit_std['YearsEmployed'] = credit_std['YearsEmployed'].transform(lambda x: (x - xbar['YearsEmployed'])/s['YearsEmployed'])
+credit_std['LogCreditScore'] = credit_std['LogCreditScore'].transform(lambda x: (x - xbar['LogCreditScore'])/s['LogCreditScore'])
+
+x_star = bootstrap_df(credit_std)
+x_star['Intercept'] = (x_star['Intercept'] 
+                       - x_star['Age']*xbar['Age']/s['Age'] 
+                       - x_star['LogIncome']*xbar['LogIncome']/s['LogIncome']
+                       - x_star['Debt']*xbar['Debt']/s['Debt']
+                       - x_star['YearsEmployed']*xbar['YearsEmployed']/s['YearsEmployed']
+                       - x_star['LogCreditScore']*xbar['LogCreditScore']/s['LogCreditScore'])
+x_star['Age'] = x_star['Age']/s['Age']
+x_star['LogIncome'] = x_star['LogIncome']/s['LogIncome']
+x_star['Debt'] = x_star['Debt']/s['Debt']
+x_star['YearsEmployed'] = x_star['YearsEmployed']/s['YearsEmployed']
+x_star['LogCreditScore'] = x_star['LogCreditScore']/s['LogCreditScore']
+
+sns.pairplot(x_star)
+
+x_star.quantile([0.025, 0.975])
+###ex8_end

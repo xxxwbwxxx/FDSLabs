@@ -1,0 +1,70 @@
+{
+    "0": {
+        "typeCode": false,
+        "solution": "###week08_ex0",
+        "hints": {}
+    },
+    "1": {
+        "typeCode": true,
+        "solution": "###week08_ex1",
+        "hints": {
+            "hint 1": "Drop a specific column using: `breast_cancer.drop(columns = ['id', 'Unnamed: 32'], inplace=True)`",
+            "hint 2": "To replace values in a column, you can use something like: `.replace({'Something':'Something else'})`"
+        }
+    },
+    "1.1": {
+        "typeCode": false,
+        "solution": "###week08_ex1.1",
+        "hints": {}
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###week08_ex2",
+        "hints": {
+            "hint 1": "For each column move the data s.t. it is centered around 0 and has variance=1"
+        }
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###week08_ex3",
+        "hints": {
+            "hint 1": "You may wish to look at the PCA lecture notes to help with writing this function and checking how it links to the mathematical basis of PCA.",
+            "hint 2": "Transpose the standardized dataset, as pandas stores data in rows x features and the covariance would be computed as the covariance of the rows, but we are interested in the covariance of the features"
+        }
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###week08_ex4",
+        "hints": {
+            "hint 1": "`argsort()` from the numpy library might be helpful."
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###week08_ex5",
+        "hints": {
+            "hint 1": "Use the `sort_eigenvalues` function that we defined in the previous question."
+        }
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###week08_ex6",
+        "hints": {
+            "hint 1": "The orientation of your arrays should be e.g: `result = standardized.dot(e_vectors[:,:2])`"
+        }
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###week08_ex7",
+        "hints": {
+            "hint (part a)": "To answer the third bullet point, compare the pair plot of the diabetes data set and the breast cancer data set."
+        }
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###week08_ex8",
+        "hints": {
+            "hint 1": "You might have to reload the data set, if you haven't stored the cleaned data set in a separate variable."
+        }
+    }
+}

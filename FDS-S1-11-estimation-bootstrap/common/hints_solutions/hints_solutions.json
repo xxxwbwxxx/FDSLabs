@@ -1,0 +1,69 @@
+{
+    "1": {
+        "typeCode": true,
+        "solution": "###ex1",
+        "hints": {
+        }
+    },
+    "2": {
+        "typeCode": true,
+        "solution": "###ex2",
+        "hints": {
+            "hint 1": "You can compute the quantiles using `np.quantile`"
+        }
+    },
+    "3": {
+        "typeCode": true,
+        "solution": "###ex3",
+        "hints": {
+            "Are they similar?": "The SEM of the distribution and the estimated SEM computed from the bootstrap estimator are similar. The quantiles look about right too, compared to the distribution."
+        }
+    },
+    "4": {
+        "typeCode": true,
+        "solution": "###ex4",
+        "hints": {
+            "Does it look as expected?": "The bootstrap distribution does not look as I expected it to. It looks bumpy. This is probably because there are some very common exact amounts of salaries, meaning the median gets stuck there."
+        }
+    },
+    "5": {
+        "typeCode": true,
+        "solution": "###ex5",
+        "hints": {
+            "hint 1": "The documentation for `scipy.stats.norm.isf()` may be helpful.",
+            "Result comparison": "The CI is very close to the CI found by the bootstrap method."
+        }
+    },
+    "6": {
+        "typeCode": true,
+        "solution": "###ex6",
+        "hints": {
+            "hint 1": "You can use `np.log10(...)`"
+        }
+    },
+    "7": {
+        "typeCode": true,
+        "solution": "###ex7",
+        "hints": {}
+    },
+    "8": {
+        "typeCode": true,
+        "solution": "###ex8",
+        "hints": {}
+    },
+    "9": {
+        "typeCode": true,
+        "solution": "###ex9",
+        "hints": {}
+    },
+    "10": {
+        "typeCode": true,
+        "solution": "###ex10",
+        "hints": {}
+    },
+    "11": {
+        "typeCode": false,
+        "solution": "###ex11",
+        "hints": {}
+    }
+}

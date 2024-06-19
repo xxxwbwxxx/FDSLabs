@@ -1,0 +1,57 @@
+###ex1
+There is nothing that specifically prevents web scraping. We are allowed to use "reasonable extracts" of the website for our our personal use or private study:
+
+"You are permitted to view the contents of this site on screen. You are also permitted to print one copy of reasonable extracts from the site for your personal use or private study and to save one copy of such reasonable extracts to your local hard disk for your personal use or private study."
+
+We are not allowed to use the data for commercial use:
+
+"It is strictly forbidden to copy any material from this website for commercial use (other than as necessary for the purpose of viewing the site in the course of business)."
+
+Education isn't a commercial use, so we interpret that we are OK for this exercise. However you couldn't scrape the information from website, and then repost it on your own website.
+###ex1_end
+
+###ex2
+r = requests.get("https://www.rspb.org.uk/dodo", headers=headers)
+r.status_code
+###ex2_end
+
+###ex3
+url = 'https://www.rspb.org.uk/birds-and-wildlife/wildlife-guides/bird-a-z/white-tailed-eagle/'
+r = requests.get(url, headers=headers)
+r.text
+###ex3_end
+
+###ex4
+soup.h1.string
+###ex4_end
+
+###ex5
+soup.body.div.div.div.div.div.div.div.div.div.div.div.div.div
+###ex5_end
+
+###ex6
+def get_measurements(text):
+    soup = BeautifulSoup(text)
+    out = pd.DataFrame({'Species': [soup.h1.string]})
+    measurements = soup.body.find_all('dl')
+    for measurement in measurements:
+        label = re.sub("^\\s+|\\s+$", '', measurement.dt.string)
+        label = re.sub(':', '', label)
+        content = re.sub("^\\s+|\\s+$", '', measurement.dd.string)
+        out.loc[0, label] = content
+    return(out)
+
+eagle = get_measurements(r.text)
+eagle
+###ex6_end
+
+###ex7
+url = 'https://www.rspb.org.uk/birds-and-wildlife/wildlife-guides/bird-a-z/aquatic-warbler/'
+r2 = requests.get(url, headers=headers)
+warbler = get_measurements(r2.text)
+warbler
+###ex7_end
+
+###ex8
+pd.merge(warbler, eagle, how='outer')
+###ex8_end

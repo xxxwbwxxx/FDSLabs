@@ -1,0 +1,127 @@
+###ex1
+def initialize_centroids(data, n_clusters):
+    random_data_points = np.random.permutation(data.shape[0])[:n_clusters]
+    return data[random_data_poin
+###ex1_end
+
+###ex2
+def assign_clusters(data, centroids):
+    euclidean_distance = pairwise_distances(data, centroids, metric='euclidean')
+    assigned_clusters = np.argmin(euclidean_distance, axis=1)
+    return assigned_clusters
+###ex2_end
+
+###ex3
+def update_centroids(data, n_clusters, assigned_clusters):
+    centroids = [data[assigned_clusters==i].mean(axis=0) for i in range(n_clusters)]
+    return np.vstack(centroids)
+###ex3_end
+
+###ex4
+class K_Means:
+    def __init__(self, n_clusters=2):
+        self.n_clusters=n_clusters
+# Your code        
+    def fit(self,data):
+        self.centroids = np.ndarray
+        self.new_centroids = initialize_centroids(data, self.n_clusters)
+        while not np.array_equal(self.new_centroids, self.centroids):
+            self.centroids = self.new_centroids
+            assigned_clusters = assign_clusters(data, self.centroids)
+            self.new_centroids = update_centroids(data, self.n_clusters, assigned_clusters)
+        
+    def predict(self, observation):
+        euclidean_distance = pairwise_distances(observation, self.centroids, metric='euclidean')
+        centroid = np.argmin(euclidean_distance, axis=1)
+        return centroid[0]
+###ex4_end
+
+###ex5
+breast_cancer = pd.read_csv(os.path.join(os.getcwd(), 'datasets', 'breast_cancer.csv'))
+standardizer = StandardScaler()
+standardized_breast_cancer = standardizer.fit_transform(breast_cancer)
+print("standardized_breast_cancer: \n", standardized_breast_cancer)
+###ex5_end
+
+###ex6
+K_means_model = K_Means(n_clusters=2)
+K_means_model.fit(standardized_breast_cancer)
+print(K_means_model.centroids)
+K_means_sklearn_model = KMeans(n_clusters=2)
+K_means_sklearn_model.fit(standardized_breast_cancer)
+print(K_means_sklearn_model.cluster_centers_)
+###ex6_end
+
+###ex7
+class K_Means:
+    def __init__(self, n_clusters=2, max_iter=100):
+        self.n_clusters=n_clusters
+        self.max_iter= max_iter
+        
+    def fit(self,data):
+        self.centroids = np.ndarray
+        self.new_centroids = initialize_centroids(data, self.n_clusters)
+        i = 0
+        while (not np.array_equal(self.new_centroids, self.centroids) and i<self.max_iter):
+            self.centroids = self.new_centroids
+            assigned_clusters = assign_clusters(data, self.centroids)
+            self.new_centroids = update_centroids(data, self.n_clusters, assigned_clusters)
+            i+=1
+        
+    def predict(self, observation):
+        euclidean_distance = pairwise_distances(observation, self.centroids, metric='euclidean')
+        centroid = np.argmin(euclidean_distance, axis=1)
+        return centroid[0]
+###ex7_end
+
+###ex8
+pca = PCA(n_components=3).fit(standardized_breast_cancer)
+pca_scores = pca.transform(standardized_breast_cancer)
+print(pca_scores)
+k_means_model = K_Means(n_clusters=2, max_iter=5)
+kmeans_pca_scores = k_means_model.fit(pca_scores)
+pca_centroids = k_means_model.centroids
+df_kmeans_pca_scores = pd.DataFrame(pca_scores)
+prediction = []
+for score in pca_scores:
+    prediction.append(k_means_model.predict(score.reshape(1,-1)))
+df_kmeans_pca_scores['Cluster'] = prediction
+sns.scatterplot(x=df_kmeans_pca_scores.iloc[:,0],
+                y=df_kmeans_pca_scores.iloc[:,1],
+                hue=df_kmeans_pca_scores['Cluster'])
+plt.scatter(pca_centroids[0][0],pca_centroids[0][1], marker='x', color='black')
+plt.scatter(pca_centroids[1][0],pca_centroids[1][1], marker='x', color='black')
+
+# Your code (for max_iter=100)
+k_means_model = K_Means(n_clusters=2, max_iter=100)
+kmeans_pca_scores = k_means_model.fit(pca_scores)
+pca_centroids = k_means_model.centroids
+df_kmeans_pca_scores = pd.DataFrame(pca_scores)
+prediction = []
+for score in pca_scores:
+    prediction.append(k_means_model.predict(score.reshape(1,-1)))
+df_kmeans_pca_scores['Cluster'] = prediction
+sns.scatterplot(x=df_kmeans_pca_scores.iloc[:,0],
+                y=df_kmeans_pca_scores.iloc[:,1],
+                hue=df_kmeans_pca_scores['Cluster'])
+plt.scatter(pca_centroids[0][0],pca_centroids[0][1], marker='x', color='black')
+plt.scatter(pca_centroids[1][0],pca_centroids[1][1], marker='x', color='black')
+###ex8_end
+
+###ex9
+breast_cancer_diagnosis = pd.read_csv(os.path.join(os.getcwd(), 'datasets', 'breast_cancer_diagnosis.csv'))
+sns.scatterplot(x=df_kmeans_pca_scores.iloc[:,0],
+                y=df_kmeans_pca_scores.iloc[:,1],
+                hue=breast_cancer_diagnosis['diagnosis'])
+###ex9_end
+
+###ex10
+df_kmeans_pca_scores['Diagnosis'] = breast_cancer_diagnosis['diagnosis']
+df_kmeans_pca_scores[['Cluster', 'Diagnosis', 0]].groupby(['Cluster', 'Diagnosis']).count()
+###ex10_end
+
+###ex10.1
+To prevent overfitting, we could run K-means several times with different randomly-selected subset and compute compute the means of the centroids of the different runs. This is also known as "Leave n out".
+
+We could use a tolerance level that once the difference between the centroids of two iterations is very small breaks the loop.
+###ex10.1_end
